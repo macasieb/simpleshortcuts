@@ -49,6 +49,10 @@ class MainUi(QtGui.QMainWindow):
     def refresh_shortcuts(self):
         layout = self.shortcut_layout
 
+        if not self.settings:
+            self.settings_button_clicked()
+            return
+
         column_width = self.settings["options"]["column_width"]
         column_count = self.settings["options"]["column_count"]
         
@@ -133,9 +137,11 @@ if __name__ == "__main__":
     import sys
     
     app = QtGui.QApplication(sys.argv)
+
     rect = app.desktop().geometry()
     
     g = MainUi()
+
     g.show()
     
     g.move(rect.center() - g.rect().center())

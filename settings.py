@@ -1,33 +1,24 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-import sip
-sip.setapi("QString", 2)
-sip.setapi("QVariant", 2)
-
-from PyQt4.QtCore import QSettings
+import json
+import os
 
 class Settings(object):
-    
-    settings = QSettings("simpleshortcuts")
-    print("Settings path:",settings.fileName())
+    path = os.path.join(os.getenv("HOME"), ".config/simpleshortcuts.conf")    
+    print("Settings path:", path)
     
     @classmethod
     def save(cls, settings_dict):
-        settings = cls.settings
-        settings.clear()
-        
-        settings.setValue("settings", settings_dict)
-        
-        settings.sync()
-    
+        with open(cls.path, "w") as f:
+            json.dump(settings_dict, f, indent=4)
+            
     @classmethod
     def read(cls):
-        settings = cls.settings
-        settings.sync()
-                
-        settings_dict = settings.value("settings", {})
-        
-        return settings_dict 
-        
-        
+        try:
+            f = open(cls.path)
+            return json.load(f)
+        except (IOError, ValueError):
+            with open(cls.path, "w") as f:
+                json.dump({}, f)
+            return {}

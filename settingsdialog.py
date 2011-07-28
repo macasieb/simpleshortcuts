@@ -109,7 +109,7 @@ class SettingsDialog(QtGui.QDialog):
         
         self.icon_size_spinbox.setValue(self.options.get("icon_size", 48))
         self.column_count_spinbox.setValue(self.options.get("column_count", 3))
-        self.column_width_spinbox.setValue(self.options.get("column_width", 80))
+        self.column_width_spinbox.setValue(self.options.get("column_width", 230))
         self.show_names_checkbox.setChecked(self.options.get("show_names", True))
         
         self.value_edited()
