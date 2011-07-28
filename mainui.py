@@ -10,6 +10,7 @@ from PyQt4 import QtCore, QtGui
 
 from settings import Settings
 from settingsdialog import SettingsDialog
+from utils import get_qicon
 
 class MainUi(QtGui.QMainWindow):
     def __init__(self):
@@ -67,16 +68,17 @@ class MainUi(QtGui.QMainWindow):
         
         for x, row in enumerate(rows):
             for y, shortcut in enumerate(row):
-                
                 button = QtGui.QPushButton()
                 button.setMaximumWidth(column_width)
                 button.setMinimumWidth(column_width)
-                                
-                button.setText(shortcut["name"])
                 
-                button.setIcon(QtGui.QIcon(shortcut["icon"]))
+                if self.settings["options"]["show_names"]:                
+                    button.setText(shortcut["name"])
+
+                button.setIcon(get_qicon(shortcut["icon"]))
                 
                 size = self.settings["options"]["icon_size"]
+                
                 button.setIconSize(QtCore.QSize(size, size))
                 
                 button.clicked.connect(partial(self.run, shortcut["command"]))
@@ -98,6 +100,7 @@ class MainUi(QtGui.QMainWindow):
     def run(self, command):
         print(command)
         command = str(command)
+        
         #for reducing startup time
         from shlex import split
         from subprocess import Popen
@@ -105,9 +108,22 @@ class MainUi(QtGui.QMainWindow):
         
         splitted = split(command)
         
-        Popen(splitted)
-        
-        exit(0)
+        try:
+            Popen(splitted)
+        except OSError as e:    
+            box = QtGui.QMessageBox()
+            
+            box.setWindowTitle("Error - SimpleShortcuts")
+            
+            box.setText('Error when trying to run "{0}"'.format(command))
+            box.setDetailedText(e.strerror)
+            
+            box.setStandardButtons(box.Close)
+            box.setDefaultButton(box.Close)
+            
+            box.exec_()
+        else:
+            exit(0)
             
     def _chunks(self, l, n):
         for i in range(0, len(l), n):

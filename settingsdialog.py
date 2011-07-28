@@ -16,6 +16,7 @@ from PyQt4 import QtCore, QtGui
 from PyQt4 import uic
 
 from settings import Settings
+from utils import get_qicon
 
 class DropZone(QtGui.QLabel):
     dropped = QtCore.pyqtSignal(str, str, str)
@@ -63,7 +64,7 @@ class DropZone(QtGui.QLabel):
             icon = parser.get("Desktop Entry", "Icon")
         except configparser.NoOptionError:
             icon = ""
-        
+            
         self.dropped.emit(name, command, icon)
             
 
@@ -81,11 +82,11 @@ class SettingsDialog(QtGui.QDialog):
         self.name_edit.setDisabled(True)
         self.command_edit.setDisabled(True)
         self.icon_button.setDisabled(True)
-        
-        self.move_up_button.setIcon(QtGui.QIcon.fromTheme("go-up"))
-        self.move_down_button.setIcon(QtGui.QIcon.fromTheme("go-down"))
-        self.add_button.setIcon(QtGui.QIcon.fromTheme("list-add"))
-        self.delete_button.setIcon(QtGui.QIcon.fromTheme("list-remove"))
+
+        self.move_up_button.setIcon(get_qicon("go-up"))
+        self.move_down_button.setIcon(get_qicon("go-down"))
+        self.add_button.setIcon(get_qicon("list-add"))
+        self.delete_button.setIcon(get_qicon("list-remove"))
 
         self.drop_zone = DropZone()
         self.drop_zone.setMinimumHeight(100)
@@ -134,13 +135,15 @@ class SettingsDialog(QtGui.QDialog):
         self.icon_button.clicked.connect(self.icon_button_clicked)
     
     def refresh_shortcuts(self):
-        while self.shortcuts_listwidget.count():
+        while self.shortcuts_listwidget.count(): 
             self.shortcuts_listwidget.takeItem(0)
         
         for shortcut in self.shortcuts:
             item = QtGui.QListWidgetItem()
+            
             item.setText(shortcut["name"])
-            item.setIcon(QtGui.QIcon(shortcut["icon"]))
+            item.setIcon(get_qicon(shortcut["icon"]))
+
             self.shortcuts_listwidget.addItem(item)
     
     def add_button_clicked(self):
@@ -202,7 +205,6 @@ class SettingsDialog(QtGui.QDialog):
         self.shortcuts_listwidget.setCurrentRow(current + 1)
     
     def selected_shortcut_changed(self):
-
         self.name_edit.setEnabled(True)
         self.command_edit.setEnabled(True)
         self.icon_button.setEnabled(True)
@@ -233,7 +235,8 @@ class SettingsDialog(QtGui.QDialog):
         
         self.name_edit.setText(shortcut["name"])
         self.command_edit.setText(shortcut["command"])
-        self.icon_button.setIcon(QtGui.QIcon(shortcut["icon"]))
+        self.icon_button.setIcon(get_qicon(shortcut["icon"]))
+
         if self.icon_button.icon().isNull():
             self.icon_button.setText("Select\nIcon")
         else:
@@ -242,7 +245,6 @@ class SettingsDialog(QtGui.QDialog):
     def value_edited(self):
         options = self.options
         shortcuts = self.shortcuts
-        
 
         #options
         options["icon_size"] = self.icon_size_spinbox.value()
