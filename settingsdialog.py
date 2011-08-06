@@ -151,7 +151,7 @@ class SettingsDialog(QtGui.QDialog):
         
         new_shortcut = {"name": "Shortcut{0}".format(len(shortcuts)),
                         "command": "command",
-                        "icon": ""}
+                        "icon": "application-x-executable"}
         
         shortcuts.append(new_shortcut)
         
