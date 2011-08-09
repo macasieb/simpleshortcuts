@@ -44,7 +44,13 @@ class DropZone(QtGui.QLabel):
         path = event.mimeData().text().replace("file://", "")
         print("Dropped:", path)
         
-        parser = configparser.ConfigParser()
+        try:
+            parser = configparser.ConfigParser(interpolation=None)
+        except TypeError:
+            parser = configparser.RawConfigParser()
+         
+        parser.optionxform = str
+      
         parser.read(path)
         
         try:
@@ -55,16 +61,22 @@ class DropZone(QtGui.QLabel):
             except configparser.NoOptionError:
                 name = ""
         
+        print("name :",  name)
+        
         try:
             command = parser.get("Desktop Entry", "Exec")
         except configparser.NoOptionError:
             command = ""
         
+        print("command :",  command)
+        print(parser.items("Desktop Entry"))
         try:
             icon = parser.get("Desktop Entry", "Icon")
         except configparser.NoOptionError:
             icon = ""
-            
+
+        print("icon :",  icon)
+
         self.dropped.emit(name, command, icon)
             
 
@@ -277,6 +289,10 @@ class SettingsDialog(QtGui.QDialog):
             self.icon_button.setText("Select\nIcon")
         else:
             self.icon_button.setText("")
+            
+        self.refresh_shortcuts()
+        
+        self.shortcuts_listwidget.setCurrentRow(current)
         
         self.value_edited()
     
@@ -302,8 +318,8 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     
     s = SettingsDialog()
-    ret = s.exec_()
-    
+    ret = s.show()
+
     if ret == 1:
         Settings.save(s.settings)
     

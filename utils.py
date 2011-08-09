@@ -2,6 +2,9 @@ import os.path
 from PyQt4.QtGui import QIcon
 
 def get_qicon(name):
+    if not name:
+        return QIcon()
+    
     if os.path.isabs(name):
         return QIcon(name)
     
