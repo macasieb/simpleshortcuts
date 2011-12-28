@@ -128,8 +128,13 @@ class MainUi(QtGui.QMainWindow):
             box.exec_()
         else:
             exit(0)
-            
-    def _chunks(self, l, n):
+    
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Escape:
+            exit(0)
+    
+    @staticmethod
+    def _chunks(l, n):
         for i in range(0, len(l), n):
             yield l[i:i+n]
 
