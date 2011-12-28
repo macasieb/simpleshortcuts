@@ -11,7 +11,7 @@ from PyQt4.QtGui import QApplication
 from mainui import MainUi
 
 app = QApplication(sys.argv)
-rect = app.desktop().geometry()
+rect = app.desktop().screenGeometry()
 
 g = MainUi()
 g.show()
