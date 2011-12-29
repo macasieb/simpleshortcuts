@@ -53,8 +53,10 @@ class MainUi(QtGui.QMainWindow):
             self.settings_button_clicked()
             return
 
-        column_width = self.settings["options"]["column_width"]
-        column_count = self.settings["options"]["column_count"]
+        options = self.settings["options"]
+            
+        column_width = options["column_width"]
+        column_count = options["column_count"]
         
         row, column = layout.rowCount(), layout.columnCount()
         
@@ -76,12 +78,21 @@ class MainUi(QtGui.QMainWindow):
                 button.setMaximumWidth(column_width)
                 button.setMinimumWidth(column_width)
                 
-                if self.settings["options"]["show_names"]:                
-                    button.setText(shortcut["name"])
-
+                if options["show_names"]:                
+                    name = shortcut["name"]
+                    
+                    if options["show_hints"]:
+                        try:
+                            name += " (&{})".format(
+                                 options["row{}_keys".format(x+1)][y]
+                                 )
+                        except:
+                            pass
+                    button.setText(name)
+                    
                 button.setIcon(get_qicon(shortcut["icon"]))
                 
-                size = self.settings["options"]["icon_size"]
+                size = options["icon_size"]
                 
                 button.setIconSize(QtCore.QSize(size, size))
                 

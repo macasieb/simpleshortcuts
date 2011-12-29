@@ -105,6 +105,13 @@ class SettingsDialog(QtGui.QDialog):
         self.drop_zone.setText("Drag and drop your desktop shortcut here to use it in this application.")
         self.options_layout.addWidget(self.drop_zone)
         
+        validator = QtGui.QRegExpValidator(QtCore.QRegExp("[^&]*"))
+        self.name_edit.setValidator(validator)
+        
+        for edit in (self.row1_edit, self.row2_edit, self.row3_edit):
+            validator = QtGui.QRegExpValidator(QtCore.QRegExp("[^ ]*"))
+            edit.setValidator(validator)
+        
         self.settings = Settings.read()
 
         try:
@@ -123,6 +130,11 @@ class SettingsDialog(QtGui.QDialog):
         self.column_count_spinbox.setValue(self.options.get("column_count", 3))
         self.column_width_spinbox.setValue(self.options.get("column_width", 230))
         self.show_names_checkbox.setChecked(self.options.get("show_names", True))
+        self.show_hints_checkbox.setChecked(self.options.get("show_hints", True))
+        
+        self.row1_edit.setText(self.options.get("row1_keys", "QWERTY"))
+        self.row2_edit.setText(self.options.get("row2_keys", "ASDFGH"))
+        self.row3_edit.setText(self.options.get("row3_keys", "ZXCVBN"))
         
         self.value_edited()
         
@@ -139,6 +151,12 @@ class SettingsDialog(QtGui.QDialog):
         self.column_count_spinbox.valueChanged.connect(self.value_edited)
         self.column_width_spinbox.valueChanged.connect(self.value_edited)
         self.show_names_checkbox.stateChanged.connect(self.value_edited)
+        self.show_hints_checkbox.stateChanged.connect(self.value_edited)
+        
+        self.row1_edit.textEdited.connect(self.value_edited)
+        self.row2_edit.textEdited.connect(self.value_edited)
+        self.row3_edit.textEdited.connect(self.value_edited)
+        
         self.name_edit.textEdited.connect(self.value_edited)
         self.command_edit.textEdited.connect(self.value_edited)
         
@@ -263,6 +281,11 @@ class SettingsDialog(QtGui.QDialog):
         options["column_count"] = self.column_count_spinbox.value()
         options["column_width"] = self.column_width_spinbox.value()
         options["show_names"] = self.show_names_checkbox.isChecked()
+        options["show_hints"] = self.show_hints_checkbox.isChecked()
+        
+        options["row1_keys"] = self.row1_edit.text()
+        options["row2_keys"] = self.row2_edit.text()
+        options["row3_keys"] = self.row3_edit.text()
         
         #shortcuts
         current = self.shortcuts_listwidget.currentRow()
