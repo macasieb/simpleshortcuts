@@ -15,11 +15,13 @@ parser = argparse.ArgumentParser(description="SimpleShortcuts")
 parser.add_argument("-s", "--settings", 
                     help="Show the settings dialog",
                     action="store_true")
+parser.add_argument("-i", "--imitate", 
+                    help="Show and immediately close the main window.",
+                    action="store_true")
                     
 args = parser.parse_args()
 
 app = QApplication(sys.argv)
-rect = app.desktop().screenGeometry()
 
 if(args.settings):
     from settingsdialog import SettingsDialog
@@ -33,9 +35,10 @@ else:
               "You may have to delete your settings file as last resort."
             )
         raise err
-    
+
 g.show()
 
+rect = app.desktop().screenGeometry()
 g.move(rect.center() - g.rect().center())
 
 app.exec_()

@@ -12,16 +12,14 @@ from settings import Settings
 from settingsdialog import SettingsDialog
 from utils import get_qicon
 
-class MainUi(QtGui.QMainWindow):
+class MainUi(QtGui.QWidget):
     def __init__(self):
-        super(QtGui.QMainWindow, self).__init__()
+        super(QtGui.QWidget, self).__init__()
         
         self.setWindowTitle("SimpleShortcuts")
         
-        central_widget = QtGui.QWidget()
-        self.setCentralWidget(central_widget)
-        
         main_layout = QtGui.QVBoxLayout()
+        main_layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
         
         self.shortcut_layout = QtGui.QGridLayout()
         
@@ -40,7 +38,7 @@ class MainUi(QtGui.QMainWindow):
         main_layout.addLayout(self.shortcut_layout)
         main_layout.addLayout(bottom_layout)
         
-        central_widget.setLayout(main_layout)
+        self.setLayout(main_layout)
 
         self.settings = Settings.read()
 
