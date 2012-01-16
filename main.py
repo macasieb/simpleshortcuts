@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 
+import os
 import sys
+import fcntl
 import argparse
 
 import sip
@@ -10,6 +12,24 @@ sip.setapi("QVariant", 2)
 from PyQt4.QtGui import QApplication
 
 from mainui import MainUi
+from settings import Settings
+
+try:
+    use_lock = Settings.read()["options"]["use_lock"]
+except KeyError:
+    use_lock = False
+
+if(use_lock):
+    LOCK_FILE = os.path.join(os.getenv("XDG_CONFIG_HOME"), "simpleshortcuts.lock")
+    print("Using lock file:", LOCK_FILE)
+
+    f = open(LOCK_FILE, "w")
+    try:
+        fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except IOError as err:
+        if(err.errno == 11):
+            print("There is another instance running. Exiting...")
+            sys.exit(1)
 
 parser = argparse.ArgumentParser(description="SimpleShortcuts")
 parser.add_argument("-s", "--settings", 
@@ -23,7 +43,7 @@ args = parser.parse_args()
 
 app = QApplication(sys.argv)
 
-if(args.settings):
+if args.settings:
     from settingsdialog import SettingsDialog
     g = SettingsDialog()
 else:
@@ -37,6 +57,8 @@ else:
         raise err
 
 g.show()
+
+if args.imitate: sys.exit()
 
 rect = app.desktop().screenGeometry()
 g.move(rect.center() - g.rect().center())

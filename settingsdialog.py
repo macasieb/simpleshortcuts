@@ -131,6 +131,7 @@ class SettingsDialog(QtGui.QDialog):
         self.column_width_spinbox.setValue(self.options.get("column_width", 230))
         self.show_names_checkbox.setChecked(self.options.get("show_names", True))
         self.show_hints_checkbox.setChecked(self.options.get("show_hints", True))
+        self.use_lock_checkbox.setChecked(self.options.get("use_lock", False))
         
         self.row1_edit.setText(self.options.get("row1_keys", "QWERTY"))
         self.row2_edit.setText(self.options.get("row2_keys", "ASDFGH"))
@@ -152,6 +153,7 @@ class SettingsDialog(QtGui.QDialog):
         self.column_width_spinbox.valueChanged.connect(self.value_edited)
         self.show_names_checkbox.stateChanged.connect(self.value_edited)
         self.show_hints_checkbox.stateChanged.connect(self.value_edited)
+        self.use_lock_checkbox.stateChanged.connect(self.value_edited)
         
         self.row1_edit.textEdited.connect(self.value_edited)
         self.row2_edit.textEdited.connect(self.value_edited)
@@ -282,6 +284,7 @@ class SettingsDialog(QtGui.QDialog):
         options["column_width"] = self.column_width_spinbox.value()
         options["show_names"] = self.show_names_checkbox.isChecked()
         options["show_hints"] = self.show_hints_checkbox.isChecked()
+        options["use_lock"] = self.use_lock_checkbox.isChecked()
         
         options["row1_keys"] = self.row1_edit.text()
         options["row2_keys"] = self.row2_edit.text()

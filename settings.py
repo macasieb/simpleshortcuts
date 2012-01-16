@@ -5,7 +5,7 @@ import json
 import os
 
 class Settings(object):
-    path = os.path.join(os.getenv("HOME"), ".config/simpleshortcuts.conf")    
+    path = os.path.join(os.getenv("XDG_CONFIG_HOME"), "simpleshortcuts.conf")    
     print("Settings path:", path)
     
     @classmethod
