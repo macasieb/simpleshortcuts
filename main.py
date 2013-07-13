@@ -2,7 +2,6 @@
 
 import os
 import sys
-import fcntl
 import argparse
 
 import sip
@@ -20,6 +19,8 @@ except KeyError:
     use_lock = False
 
 if(use_lock):
+    import fcntl
+
     LOCK_FILE = os.path.join(os.getenv("XDG_CONFIG_HOME"), "simpleshortcuts.lock")
     print("Using lock file:", LOCK_FILE)
 
