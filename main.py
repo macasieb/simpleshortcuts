@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python2
 
 import os
 import sys
@@ -32,13 +32,13 @@ if(use_lock):
             sys.exit(1)
 
 parser = argparse.ArgumentParser(description="SimpleShortcuts")
-parser.add_argument("-s", "--settings", 
+parser.add_argument("-s", "--settings",
                     help="Show the settings dialog",
                     action="store_true")
-parser.add_argument("-i", "--imitate", 
+parser.add_argument("-i", "--imitate",
                     help="Show and immediately close the main window.",
                     action="store_true")
-                    
+
 args = parser.parse_args()
 
 app = QApplication(sys.argv)
