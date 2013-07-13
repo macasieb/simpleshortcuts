@@ -5,14 +5,15 @@ import json
 import os
 
 class Settings(object):
-    path = os.path.join(os.getenv("XDG_CONFIG_HOME"), "simpleshortcuts.conf")    
+    settings_path = os.getenv("XDG_CONFIG_HOME", os.path.join(os.getenv("HOME"), ".config"))
+    path = os.path.join(settings_path, "simpleshortcuts.conf")
     print("Settings path:", path)
-    
+
     @classmethod
     def save(cls, settings_dict):
         with open(cls.path, "w") as f:
             json.dump(settings_dict, f, indent=4)
-            
+
     @classmethod
     def read(cls):
         try:

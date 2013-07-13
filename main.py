@@ -21,7 +21,7 @@ except KeyError:
 if(use_lock):
     import fcntl
 
-    LOCK_FILE = os.path.join(os.getenv("XDG_CONFIG_HOME"), "simpleshortcuts.lock")
+    LOCK_FILE = os.path.join(settings.settings_path, "simpleshortcuts.lock")
     print("Using lock file:", LOCK_FILE)
 
     f = open(LOCK_FILE, "w")
