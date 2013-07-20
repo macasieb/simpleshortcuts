@@ -21,7 +21,7 @@ except KeyError:
 if(use_lock):
     import fcntl
 
-    LOCK_FILE = os.path.join(settings.settings_path, "simpleshortcuts.lock")
+    LOCK_FILE = os.path.join(Settings.settings_path, "simpleshortcuts.lock")
     print("Using lock file:", LOCK_FILE)
 
     f = open(LOCK_FILE, "w")
@@ -31,6 +31,7 @@ if(use_lock):
         if(err.errno == 11):
             print("There is another instance running. Exiting...")
             sys.exit(1)
+        raise err
 
 parser = argparse.ArgumentParser(description="SimpleShortcuts")
 parser.add_argument("-s", "--settings",
